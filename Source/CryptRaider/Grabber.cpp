@@ -32,11 +32,8 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FRotator MyRotaion = GetComponentRotation();
-	FString RotationString = MyRotaion.ToCompactString();
-	UE_LOG(LogTemp, Display, TEXT("Grabber Rotation : %s"), *RotationString);
-	
-	float Time = GetWorld()->TimeSeconds;
-	UE_LOG(LogTemp, Display, TEXT("Current Time is : %f"), Time);
+	FVector Start = GetComponentLocation();
+	FVector End = Start + GetForwardVector() * MaxGrabDistance;
+	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
 };
 
