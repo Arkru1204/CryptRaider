@@ -31,9 +31,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 
 	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle == nullptr)
-	{
 		return;
-	}
 
 	FVector TargetLocation = GetComponentLocation() + GetForwardVector() * HoldDistance;
 	PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetComponentRotation());
@@ -43,9 +41,7 @@ void UGrabber::Grab()
 {
 	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle == nullptr)
-	{
 		return;
-	}
 
 	FVector Start = GetComponentLocation();
 	FVector End = Start + GetForwardVector() * MaxGrabDistance;
@@ -54,7 +50,7 @@ void UGrabber::Grab()
 
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
 	FHitResult HitResult;
-	bool HasHit = GetWorld()->SweepSingleByChannel(
+	bool HasHit = GetWorld()->SweepSingleByChannel( // 도형 단일 충돌
 		HitResult,
 		Start, End,
 		FQuat::Identity,
@@ -63,8 +59,10 @@ void UGrabber::Grab()
 
 	if (HasHit)
 	{
+		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		HitComponent->WakeAllRigidBodies(); // 물리 오브젝트 깨우기
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
-			HitResult.GetComponent(),
+			HitComponent,
 			NAME_None,
 			HitResult.ImpactPoint,
 			GetComponentRotation()
@@ -80,9 +78,7 @@ void UGrabber::Release()
 UPhysicsHandleComponent* UGrabber::GetPhysicsHandle() const
 {
 	UPhysicsHandleComponent* Result = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
-	if (Result == nullptr)
-	{
+	if (Result == nullptr) // 포인터가 null이면 충돌
 		UE_LOG(LogTemp, Error, TEXT("Grabber requires a UPhysicsHandleComponent."));
-	}
 	return Result;
 }
