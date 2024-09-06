@@ -90,7 +90,7 @@ bool UGrabber::GetGrabbableInReach(FHitResult& OutHitResult) const
 	DrawDebugSphere(GetWorld(), End, 10, 10, FColor::Blue, false, 5);
 
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
-	return GetWorld()->SweepSingleByChannel( // 도형 단일 충돌
+	return GetWorld()->SweepSingleByChannel( // 도형 단일 충돌 여부
 		OutHitResult,
 		Start, End,
 		FQuat::Identity,
