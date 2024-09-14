@@ -29,10 +29,12 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	TArray<AActor*> Actors;
 	GetOverlappingActors(Actors);
-
 	for (AActor* Actor : Actors)
 	{
-		FString ActorName = Actor->GetActorNameOrLabel();
-		UE_LOG(LogTemp, Display, TEXT("Overlapping: %s"), *ActorName);
+		//FString ActorName = Actor->GetActorNameOrLabel();
+		if (Actor->ActorHasTag(AcceptableActorTag))
+		{
+			UE_LOG(LogTemp, Display, TEXT("Unlocking"));
+		}
 	}
 }
