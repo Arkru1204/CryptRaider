@@ -30,6 +30,14 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	AActor* Actor = GetAcceptableActor();
 	if (Actor != nullptr)
 	{
+		// Cast: 컴파일 타임 파라미터를 받는 함수 (UPrimitiveComponent라면 포인터 반환)
+		UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(Actor->GetRootComponent());
+		if (Component != nullptr)
+		{
+			Component->SetSimulatePhysics(false); // 시뮬레이션 물리 비활성화
+		}
+		Actor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform); // this에 Actor을 부착
+
 		Mover->SetShouldMove(true);
 	}
 	else
@@ -38,6 +46,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	}
 }
 
+// BP에서 의존성 주입
 void UTriggerComponent::SetMover(UMover* NewMover)
 {
 	Mover = NewMover;
