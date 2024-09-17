@@ -48,8 +48,11 @@ void UGrabber::Grab()
 	if (HasHit)
 	{
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		HitComponent->SetSimulatePhysics(true); // 시뮬레이션 물리 활성화
 		HitComponent->WakeAllRigidBodies(); // 물리 오브젝트 깨우기
-		HitResult.GetActor()->Tags.Add("Grabbed"); // 엑터에 태그 추가
+		AActor* HitActor = HitResult.GetActor();
+		HitActor->Tags.Add("Grabbed"); // 엑터에 태그 추가
+		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform); // Actor를 오브젝트에서 분리
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			HitComponent,
 			NAME_None,
