@@ -52,6 +52,7 @@ void UGrabber::Grab()
 	{
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		HitComponent->WakeAllRigidBodies(); // 물리 오브젝트 깨우기
+		HitResult.GetActor()->Tags.Add("Grabbed"); // 엑터에 태그 추가
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			HitComponent,
 			NAME_None,
@@ -69,7 +70,8 @@ void UGrabber::Release()
 
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
-		PhysicsHandle->GetGrabbedComponent()->WakeAllRigidBodies();
+		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		GrabbedActor->Tags.Remove("Grabbed"); // 태그 삭제
 		PhysicsHandle->ReleaseComponent();
 	}
 }
