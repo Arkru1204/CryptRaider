@@ -52,13 +52,16 @@ void UTriggerComponent::SetMover(UMover* NewMover)
 	Mover = NewMover;
 }
 
+// 트리거 대상 액터인지 태그 검사
 AActor* UTriggerComponent::GetAcceptableActor() const
 {
 	TArray<AActor*> Actors;
 	GetOverlappingActors(Actors);
 	for (AActor* Actor : Actors)
 	{
-		if (Actor->ActorHasTag(AcceptableActorTag))
+		bool HasAcceptableTag = Actor->ActorHasTag(AcceptableActorTag); // 트리거 대상 태그
+		bool IsGrabbed = Actor->ActorHasTag("Grabbed"); // 잡고 있는지
+		if (HasAcceptableTag && !IsGrabbed)
 		{
 			return Actor;
 		}
