@@ -27,14 +27,15 @@ public:
 	void SetShouldMove(bool ShouldMove);
 
 private:
+	// 이동 거리
 	UPROPERTY(EditAnywhere)
 	FVector MoverOffset;
 
 	UPROPERTY(EditAnywhere)
 	float MoveTime = 4;
 
-	bool ShouldMove = false;
+	bool ShouldMove = false; // 트리거 작동 시
 
-	FVector OriginalLocation;
+	FVector OriginalLocation; // 처음 위치
 
 };

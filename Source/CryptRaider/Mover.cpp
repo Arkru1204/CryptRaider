@@ -30,16 +30,16 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	FVector TargetLocation = OriginalLocation; // 트리거가 작동하지 않을 시 원점으로
 	if (ShouldMove)
 	{
-		FVector CurrentLocation = GetOwner()->GetActorLocation();
-		FVector TargetLocation = OriginalLocation + MoverOffset;
-		float Speed = FVector::Distance(OriginalLocation, TargetLocation) / MoveTime; // 속력 = 거리 / 시간
-
-		FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
-		GetOwner()->SetActorLocation(NewLocation);
+		TargetLocation = OriginalLocation + MoverOffset;
 	}
-	
+	FVector CurrentLocation = GetOwner()->GetActorLocation();
+	float Speed = MoverOffset.Length() / MoveTime; // 속력 = 거리 / 시간
+
+	FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
+	GetOwner()->SetActorLocation(NewLocation);
 }
 
 void UMover::SetShouldMove(bool NewShouldMove)
